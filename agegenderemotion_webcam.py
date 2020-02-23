@@ -58,17 +58,17 @@ def process_facedetection(model_detector, model_poseestimator, model_ageestimato
     # Initialize the camera
     camera = cam_init(cam_index, cam_resolution[0], cam_resolution[1])
 
-    try:
+    # try:
         # Initialize face detection
-        face_detector = FaceDetector(model=model_detector, path=INPUT_DIR_MODEL_DETECTION, minfacesize=120)
-        # Initialize face pose/age/gender estimation
-        face_pose_estimator = FacePoseEstimator(model=model_poseestimator, path=INPUT_DIR_MODEL_ESTIMATION)
-        face_age_estimator = FaceAgeEstimator(model=model_ageestimator, path=INPUT_DIR_MODEL_ESTIMATION)
-        face_gender_estimator = FaceGenderEstimator(model=model_genderestimator, path=INPUT_DIR_MODEL_ESTIMATION)
-        # face_emotion_estimator = FaceEmotionEstimator(model=model_emotionestimator, path=INPUT_DIR_MODEL_ESTIMATION)
-    except:
-        print("Warning, check if models and trained dataset models exists!")
-    (age, gender, emotion) = (None, None, None)
+    face_detector = FaceDetector(model=model_detector, path=INPUT_DIR_MODEL_DETECTION, minfacesize=120)
+    # Initialize face pose/age/gender estimation
+    face_pose_estimator = FacePoseEstimator(model=model_poseestimator, path=INPUT_DIR_MODEL_ESTIMATION)
+    face_age_estimator = FaceAgeEstimator(model=model_ageestimator, path=INPUT_DIR_MODEL_ESTIMATION)
+    face_gender_estimator = FaceGenderEstimator(model=model_genderestimator, path=INPUT_DIR_MODEL_ESTIMATION)
+    # face_emotion_estimator = FaceEmotionEstimator(model=model_emotionestimator, path=INPUT_DIR_MODEL_ESTIMATION)
+    # except:
+    #     print("Warning, check if models and trained dataset models exists!")
+    # (age, gender, emotion) = (None, None, None)
 
 
     while (True):
@@ -90,10 +90,11 @@ def process_facedetection(model_detector, model_poseestimator, model_ageestimato
             age = face_age_estimator.estimate(frame, face_image)
             gender = face_gender_estimator.estimate(frame, face_image)
             # emotion = face_emotion_estimator.estimate(frame, face_image)
+            # lable_face(frame, face, )
 
             # Detect and draw face pose locations
             shape = face_pose_estimator.detect(frame, face)
-            face_pose_estimator.add_overlay(frame, shape)
+            # face_pose_estimator.add_overlay(frame, shape)
 
             # Display age, gender, emotion
             if True: # Added condition to easily disable text
@@ -101,6 +102,7 @@ def process_facedetection(model_detector, model_poseestimator, model_ageestimato
                     (x, y-45), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1, cv2.LINE_AA)
                 cv2.putText(frame, "Gender: {}".format(gender), 
                     (x, y-30), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1, cv2.LINE_AA)
+                cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 255, 255), 1)
                 # cv2.putText(frame, "Emotion: {}".format(emotion), 
                 #     (x, y-15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1, cv2.LINE_AA)
 
